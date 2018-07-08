@@ -5,7 +5,7 @@ import requests
 
 #############################################################################################
 ##########    This script will search the NASA image repository for SEARCH_TERM    ##########
-##########    Create a SVC file called CSV_FILE_NAME                               ##########
+##########    Create a CSV file called CSV_FILE_NAME                               ##########
 ##########    And add to that file, only images from the search result             ##########
 ##########    that are larger than IMAGE_SIZE_THREASHOLD                           ##########
 #############################################################################################
