@@ -13,7 +13,10 @@ import requests
 
 SEARCH_TERM = "ilan ramon"
 NASA_IMG_API = "https://images-api.nasa.gov/search?q=%s"
-CSV_FILE_NAME = 'images.csv'
+
+#TODO: create out dir if not exist
+
+CSV_FILE_NAME = 'out/images.csv'
 IMAGE_SIZE_THREASHOLD = 1024
 
 image_search_result = requests.get(NASA_IMG_API % SEARCH_TERM)
