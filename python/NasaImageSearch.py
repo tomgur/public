@@ -3,6 +3,14 @@ import json
 
 import requests
 
+#############################################################################################
+##########    This script will search the NASA image repository for SEARCH_TERM    ##########
+##########    Create a SVC file called CSV_FILE_NAME                               ##########
+##########    And add to that file, only images from the search result             ##########
+##########    that are larger than IMAGE_SIZE_THREASHOLD                           ##########
+#############################################################################################
+
+
 SEARCH_TERM = "ilan ramon"
 NASA_IMG_API = "https://images-api.nasa.gov/search?q=%s"
 CSV_FILE_NAME = 'images.csv'
