@@ -1,0 +1,12 @@
+---
+- name: Check if git package exists
+  yum:
+    list=git
+  register: git
+
+- name: Install Git
+  yum:
+    name: git
+    state: latest
+  become: yes
+  when: git.results | selectattr("yumstate", "match", "installed") | list | length == 0

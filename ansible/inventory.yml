@@ -1,0 +1,13 @@
+[jenkins]
+35.130.111.175 ansible_ssh_private_key_file=/var/jenkins_home/aws-london.pem
+
+[slaves]
+35.178.167.192 ansible_ssh_private_key_file=/var/jenkins_home/aws-london.pem
+18.130.23.3 ansible_ssh_private_key_file=/var/jenkins_home/aws-london.pem
+35.177.125.71 ansible_ssh_private_key_file=/var/jenkins_home/aws-london.pem
+
+[nexus]
+18.130.226.162 ansible_ssh_private_key_file=/var/jenkins_home/aws-london.pem
+
+[docker-registry]
+18.130.226.162 ansible_ssh_private_key_file=/var/jenkins_home/aws-london.pem

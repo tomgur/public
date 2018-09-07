@@ -1,0 +1,98 @@
+!/bin/bash
+
+### BEGIN INIT INFO
+# INIT INFO
+# Provides:          docker
+# Required-Start:    networking
+# Required-Stop:     networking
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: docker
+# Description:       docker
+### END INIT INFO
+
+. /etc/init.d/functions
+
+NAME=docker
+PID_FILE="/var/run/${NAME}.pid"
+DELAY=0
+
+status_q() {
+  status -p $PID_FILE $NAME > /dev/null
+  return $?
+}
+
+start_app() {
+   nohup /usr/bin/docker -d >/var/log/docker.log 2>&1 </dev/null &
+   return $?
+}
+
+start() {
+        status_q; res=$?
+
+  if [ $res -eq 3 ]; then
+           echo -n $"$NAME starting..."
+
+           start_app
+
+           echo $! > $PID_FILE
+
+           [ $DELAY -gt 0 ] && sleep $DELAY
+           status_q; res=$?
+
+           [ $res -eq 0 ] && success || failure
+           echo
+        elif [ $res -eq 0 ]; then
+           success; echo "$NAME is already running"
+        else
+           failure; echo "$NAME is not running, res: $res"
+        fi
+        return $res
+}
+
+
+stop() {
+        status_q; res=$?
+        if [ $res -eq 3 ]; then
+           success && echo "$NAME is not running"
+        else
+           killproc -p $PID_FILE; res=$?
+
+           if [ $res -eq 0 ]; then
+             rm -f PID_FILE
+             success && echo "$NAME has been stopped"
+           else
+             failure && echo "$NAME cannot be stopped ($res)"
+           fi
+        fi
+
+        return $res
+}
+
+case $1 in
+  start)
+           start
+           exit $?
+  ;;
+  stop)
+           stop
+           exit $?
+  ;;
+  status)
+     echo -n $"$NAME running..."
+           status_q; res=$?
+
+     [ $res -eq 0 ] && success || failure
+     echo
+           exit $res
+  ;;
+  restart)
+           stop
+           start
+           exit $?
+  ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 2
+    ;;
+esac

@@ -1,0 +1,29 @@
+---
+- name: Check if java1.8 package exists
+  yum:
+    list=jdk1.8
+  register: pkg
+
+- name: Copy download script
+  copy:
+    src: ../files/download_JDK.sh
+    dest: /tmp/jdk/
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+  when: pkg.results | selectattr("yumstate", "match", "installed") | list | length == 0
+
+- name: Run the download script
+  shell: ./download_JDK.sh
+  args:
+    chdir: /tmp/jdk/
+  become: yes
+  when: pkg.results | selectattr("yumstate", "match", "installed") | list | length == 0
+
+- name: install JDK rpm from a local file
+  shell: yum install -y $(ls jdk*.rpm)
+  args:
+    chdir: /tmp/jdk/
+  become: yes
+  when: pkg.results | selectattr("yumstate", "match", "installed") | list | length == 0

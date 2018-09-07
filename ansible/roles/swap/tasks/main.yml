@@ -1,0 +1,42 @@
+---
+# this isn't the check i'm good with
+# I would check if swap is on, and if it is the correct size....
+- name: Chceck if swap file exists
+  stat: path=/1GB.swap
+  register: swapFile
+
+- name: create the file to be used for swap
+  command: dd if=/dev/zero of=/1GB.swap bs=1024 count=1024000
+  become: yes
+  when: swapFile.stat.exists == False
+
+- name: format the file for swap
+  command: mkswap /1GB.swap
+  become: yes
+  when: swapFile.stat.exists == False
+
+- name: change swap file permissions
+  file:
+    path: /1GB.swap
+    owner: root
+    group: root
+    mode: 0600
+  become: yes
+  when: swapFile.stat.exists == False
+
+- name: add the file to the system as a swap file
+  command: swapon /1GB.swap
+  become: yes
+  when: swapFile.stat.exists == False
+
+- name: write swap entry in fstab
+  mount:
+    name: none
+    src: /1GB.swap
+    fstype: swap
+    opts: sw
+    passno: 0
+    dump: 0
+    state: present
+  become: yes
+  when: swapFile.stat.exists == False
